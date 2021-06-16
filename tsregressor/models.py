@@ -44,6 +44,7 @@ class TSRegressor(BaseEstimator, RegressorMixin):
             self.freq = self.date.dt.freq
 
         # transform target
+        y += 1
         temp,lmbda = boxcox(y)
         self.lmbda = lmbda
         target_trans = pd.Series(temp,index=self.date)
@@ -95,13 +96,14 @@ class TSRegressor(BaseEstimator, RegressorMixin):
         #check_is_fitted(self)
 
         # predict on transformed target
-        pred_trans = self.clf.predict(X_trans)
+        pred_trans = self.clf.predict(X_trans[self.feat_cols])
 
         # untransform
         if len(X_trans.index) > len(self.target_shift.index):
             self.target_shift = self.target_shift.reindex(pd.date_range(start=self.target_shift.index.min(),periods=len(X_trans.index),freq=self.freq))
         temp = pred_trans + self.target_shift
         y_pred = inv_boxcox(temp,self.lmbda)
+        y_pred -= 1
 
         return y_pred
 
