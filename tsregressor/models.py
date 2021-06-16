@@ -19,6 +19,7 @@ class TSRegressor(BaseEstimator, RegressorMixin):
         self.target_shift = None
         self.target_trans = pd.Series()
         self.clf = None
+        self.feat_cols = None
         self.lmbda = None
 
     def get_params(self, deep=True):
@@ -27,10 +28,10 @@ class TSRegressor(BaseEstimator, RegressorMixin):
                 "exog":self.exog,
                 "target":self.target,
                 "date":self.date,
-                'target_shift':target_shift,
-                'target_trans':target_trans,
-                'clf':clf,
-                'lmbda':lmbda}
+                'target_shift':self.target_shift,
+                'target_trans':self.target_trans,
+                'clf':self.clf,
+                'lmbda':self.lmbda}
 
     def set_params(self, **parameters):
         for parameter, value in parameters.items():
@@ -52,6 +53,7 @@ class TSRegressor(BaseEstimator, RegressorMixin):
 
         # transform features
         X_new = self.transform(X)
+        self.feat_cols = X_new.columns
 
         # model
         self.clf = XGBRegressor()
