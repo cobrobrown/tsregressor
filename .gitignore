@@ -1,0 +1,7 @@
+
+*.whl
+*.gz
+tsregressor.egg-info/dependency_links.txt
+tsregressor.egg-info/PKG-INFO
+tsregressor.egg-info/SOURCES.txt
+tsregressor.egg-info/top_level.txt
